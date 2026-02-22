@@ -170,5 +170,21 @@ a.click();
 }
 
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC29uT6n-xKSCZ_2lwiLmbuvjn9Bf4qYqQ",
+    authDomain: "zaysai.firebaseapp.com",
+    projectId: "zaysai",
+    storageBucket: "zaysai.firebasestorage.app",
+    messagingSenderId: "868257719461",
+    appId: "1:868257719461:web:7e61d7c63cadd03dcc994c"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 </body>
 </html>
