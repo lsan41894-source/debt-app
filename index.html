@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบบันทึกหนี้ Pro</title>
+
+<style>
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#4facfe,#00f2fe);
+    padding:20px;
+    color:#333;
+}
+.container{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    max-width:900px;
+    margin:auto;
+}
+h2{
+    text-align:center;
+}
+input, button{
+    padding:8px;
+    margin:5px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+button{
+    cursor:pointer;
+    background:#4facfe;
+    color:white;
+    border:none;
+}
+button:hover{
+    background:#00c6ff;
+}
+table{
+    width:100%;
+    margin-top:15px;
+    border-collapse:collapse;
+}
+th,td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+th{
+    background:#4facfe;
+    color:white;
+}
+.total{
+    margin-top:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+.danger{
+    background:#ff4d4d;
+}
+.danger:hover{
+    background:#cc0000;
+}
+.search{
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>💰 ระบบบันทึกหนี้</h2>
+
+<input type="text" id="name" placeholder="ชื่อลูกหนี้">
+<input type="number" id="amount" placeholder="จำนวนเงิน">
+<input type="date" id="date">
+<button onclick="addDebt()">เพิ่ม</button>
+
+<div class="search">
+<input type="text" id="search" placeholder="ค้นหาชื่อ..." oninput="renderTable()">
+<button class="danger" onclick="clearAll()">ล้างข้อมูลทั้งหมด</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>ชื่อ</th>
+<th>จำนวนเงิน</th>
+<th>วันที่</th>
+<th>ลบ</th>
+</tr>
+</thead>
+<tbody id="debtTable"></tbody>
+</table>
+
+<div class="total" id="totalAmount">รวม: 0 บาท</div>
+</div>
+
+<script>
+let debts = JSON.parse(localStorage.getItem("debts")) || [];
+
+function saveData(){
+    localStorage.setItem("debts",JSON.stringify(debts));
+}
+
+function addDebt(){
+    const name = document.getElementById("name").value.trim();
+    const amount = document.getElementById("amount").value;
+    const date = document.getElementById("date").value;
+
+    if(!name || !amount || !date){
+        alert("กรอกข้อมูลให้ครบ");
+        return;
+    }
+
+    debts.push({name,amount:Number(amount),date});
+    debts.sort((a,b)=> new Date(b.date)-new Date(a.date));
+    saveData();
+    renderTable();
+
+    document.getElementById("name").value="";
+    document.getElementById("amount").value="";
+    document.getElementById("date").value="";
+}
+
+function deleteDebt(index){
+    debts.splice(index,1);
+    saveData();
+    renderTable();
+}
+
+function clearAll(){
+    if(confirm("ต้องการล้างข้อมูลทั้งหมด?")){
+        debts=[];
+        saveData();
+        renderTable();
+    }
+}
+
+function renderTable(){
+    const table=document.getElementById("debtTable");
+    const search=document.getElementById("search").value.toLowerCase();
+    table.innerHTML="";
+    let total=0;
+
+    debts.forEach((debt,index)=>{
+        if(debt.name.toLowerCase().includes(search)){
+            total+=debt.amount;
+            table.innerHTML+=`
+            <tr>
+            <td>${debt.name}</td>
+            <td>${debt.amount.toLocaleString()}</td>
+            <td>${debt.date}</td>
+            <td><button class="danger" onclick="deleteDebt(${index})">ลบ</button></td>
+            </tr>`;
+        }
+    });
+
+    document.getElementById("totalAmount").innerText=
+    "รวม: "+total.toLocaleString()+" บาท";
+}
+
+renderTable();
+</script>
+
+</body>
+</html>
