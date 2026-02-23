@@ -60,35 +60,9 @@ th{background:#4CAF50;color:white}
 </div>
 
 <script>
-function calculateTotal() {
-  let total = 0;
-
-  debts.forEach(function(item) {
-    total += Number(item.amount);
-  });
-
-  document.getElementById("totalAmount").innerText =
-    "💰 ยอดเงินลูกหนี้รวมทั้งหมด: " + total.toLocaleString() + " บาท";
-}
-  // สรุปยอดแยกตามชื่อ
-const summary = {};
-
-debts.forEach(d => {
-  summary[d.name] = (summary[d.name] || 0) + d.amount;
-});
-
-let summaryHTML = "<h3>📌 สรุปยอดรายคน</h3>";
-
-for (let name in summary) {
-  summaryHTML += name + " : " + summary[name].toLocaleString() + " บาท<br>";
-}
-
-document.getElementById("summaryByPerson").innerHTML = summaryHTML;
-
-renderChart();
-}
-
 const APP_PASSWORD="12345";
+
+let debts=JSON.parse(localStorage.getItem("debts"))||[];
 
 function login(){
 const pass=document.getElementById("password").value;
@@ -100,8 +74,6 @@ renderTable();
 alert("รหัสผิด");
 }
 }
-
-let debts=JSON.parse(localStorage.getItem("debts"))||[];
 
 function save(){
 localStorage.setItem("debts",JSON.stringify(debts));
@@ -161,16 +133,35 @@ table.innerHTML+=`
 
 document.getElementById("totalAmount").innerText="รวมทั้งหมด: "+total.toLocaleString()+" บาท";
 
+renderSummary();
 renderChart();
+}
+
+function renderSummary(){
+const summary={};
+
+debts.forEach(d=>{
+summary[d.name]=(summary[d.name]||0)+d.amount;
+});
+
+let html="<h3>📌 สรุปยอดรายคน</h3>";
+
+for(let name in summary){
+html+=name+" : "+summary[name].toLocaleString()+" บาท<br>";
+}
+
+document.getElementById("summaryByPerson").innerHTML=html;
 }
 
 function renderChart(){
 const summary={};
+
 debts.forEach(d=>{
 summary[d.name]=(summary[d.name]||0)+d.amount;
 });
 
 const ctx=document.getElementById('chart');
+
 new Chart(ctx,{
 type:'bar',
 data:{
@@ -195,7 +186,8 @@ a.href=url;
 a.download="debt-data.csv";
 a.click();
 }
-
+  
+</script>
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
