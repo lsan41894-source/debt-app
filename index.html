@@ -84,7 +84,11 @@ for (let name in summary) {
 }
 
 document.getElementById("summaryByPerson").innerHTML = summaryHTML;
-const APP_PASSWORD="12345"; // เปลี่ยนรหัสตรงนี้ได้
+
+renderChart();
+}
+
+const APP_PASSWORD="12345";
 
 function login(){
 const pass=document.getElementById("password").value;
