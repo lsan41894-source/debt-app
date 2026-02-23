@@ -53,7 +53,7 @@ th{background:#4CAF50;color:white}
 </table>
 
 <div class="total" id="totalAmount"></div>
-
+<div id="summaryByPerson"></div>
 <h3>📊 กราฟสรุปยอดตามลูกหนี้</h3>
 <canvas id="chart"></canvas>
 
@@ -70,6 +70,20 @@ function calculateTotal() {
   document.getElementById("totalAmount").innerText =
     "💰 ยอดเงินลูกหนี้รวมทั้งหมด: " + total.toLocaleString() + " บาท";
 }
+  // สรุปยอดแยกตามชื่อ
+const summary = {};
+
+debts.forEach(d => {
+  summary[d.name] = (summary[d.name] || 0) + d.amount;
+});
+
+let summaryHTML = "<h3>📌 สรุปยอดรายคน</h3>";
+
+for (let name in summary) {
+  summaryHTML += name + " : " + summary[name].toLocaleString() + " บาท<br>";
+}
+
+document.getElementById("summaryByPerson").innerHTML = summaryHTML;
 const APP_PASSWORD="1234"; // เปลี่ยนรหัสตรงนี้ได้
 
 function login(){
