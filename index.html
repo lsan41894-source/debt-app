@@ -60,7 +60,16 @@ th{background:#4CAF50;color:white}
 </div>
 
 <script>
+function calculateTotal() {
+  let total = 0;
 
+  debts.forEach(function(item) {
+    total += Number(item.amount);
+  });
+
+  document.getElementById("totalAmount").innerText =
+    "💰 ยอดเงินลูกหนี้รวมทั้งหมด: " + total.toLocaleString() + " บาท";
+}
 const APP_PASSWORD="1234"; // เปลี่ยนรหัสตรงนี้ได้
 
 function login(){
