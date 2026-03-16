@@ -32,7 +32,7 @@ th{background:#4CAF50;color:white}
 <div class="container" id="mainApp">
 <h2>💰 ระบบบันทึกหนี้</h2>
 
-<input type="text" id="debtorId" placeholder="รหัสลูกหนี้">
+<input type="text" id="debtorId" placeholder="รหัสลูกหนี้" onkeyup="autoFillName()">
 <input type="text" id="name" placeholder="ชื่อ">
 <input type="number" id="amount" placeholder="จำนวนเงิน">
 <input type="date" id="date">
@@ -64,6 +64,12 @@ th{background:#4CAF50;color:white}
 const APP_PASSWORD="12345";
 let debts=JSON.parse(localStorage.getItem("debts"))||[];
 
+const debtorList = {
+"001":"สมชาย",
+"002":"สมหญิง",
+"003":"สมปอง"
+};
+  
 function login(){
 const pass=document.getElementById("password").value;
 if(pass===APP_PASSWORD){
@@ -73,8 +79,12 @@ renderTable();
 }else{
 alert("รหัสผิด");
 }
-}
 
+function autoFillName(){
+const id=document.getElementById("debtorId").value;
+const name=debtorList[id] || "";
+document.getElementById("name").value=name;
+}
 function save(){
 localStorage.setItem("debts",JSON.stringify(debts));
 }
