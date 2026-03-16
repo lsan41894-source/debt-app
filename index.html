@@ -94,6 +94,11 @@ localStorage.setItem("debts",JSON.stringify(debts));
 function addDebt(){
 const debtorId=document.getElementById("debtorId").value.trim();
 const name=document.getElementById("name").value.trim();
+
+if(!debtorList[debtorId]){
+debtorList[debtorId]=name;
+}
+  
 const amount=Number(document.getElementById("amount").value);
 const date=document.getElementById("date").value;
 
