@@ -84,7 +84,7 @@ function autoFillName(){
 const id=document.getElementById("debtorId").value;
 const name=debtorList[id] || "";
 document.getElementById("name").value=name;
-}
+}  
 function save(){
 localStorage.setItem("debts",JSON.stringify(debts));
 }
